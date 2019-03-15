@@ -24,10 +24,11 @@ def getFiles ():
 def getFileName (files, name):
     # file : files list of cwd
     # name : file name user inputted
+    # search caseinsentively
     #-----------------------------------
     candidates = list()
     for file in files:
-        result = re.search(name,file)
+        result = re.search(name,file, re.IGNORECASE)
         # if a matching occurs
         if result:
             # append file name to candidate list
