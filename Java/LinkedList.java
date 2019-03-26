@@ -83,8 +83,8 @@ public class LinkedList {
     
     */
     public LinkedList () { 
+        
         // word 'this' is redundant but helps reading the code
-
         this.headNode = null;
     }
 
