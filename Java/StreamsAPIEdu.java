@@ -59,7 +59,7 @@ public class StreamsAPIEdu {
         /* 2 - Filtering elements */
 
         // filtering is applied based on a rule called 'predicate' 
-        // first task is creating a predicate
+        // one can also define special predicates seperately.
         List<String> list1 = Arrays.asList("Kelime1","Kelime2","Kelime3");
         
         // turn it to a stream, filter and collect back into antother list this time
