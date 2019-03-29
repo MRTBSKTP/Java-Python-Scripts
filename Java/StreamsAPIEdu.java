@@ -1,8 +1,10 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.List;
+import java.util.Map;
 
 /**
  *  About streams of JAVA8 ...
@@ -32,6 +34,17 @@ import java.util.List;
  *                                  methods beyond these are invalid e.g. ;
  *                                  #####.stream().foreach(); -> no stream beyond foreach
  * 
+ *     Intermediate operations are called 'lazy' meaning they wont do actual processing 
+ *     until a terminal operation is called on stream. Lazy operations are chained together 
+ *     and memorized and when terminal operation gets called these all get executed.
+ * 
+ *     Order of execution:
+ * 
+ *     .lazy() -> .lazy() .... -> .lazy()
+ *                                .terminal()    
+ * 
+ *     last lazy op. is executed with terminal op. at the same time.
+ * 
  *     Output operations are only handled when a terminal function exists in a operation pipeline !
  * 
  *  Mert Beşiktepe 2019 ITU
@@ -59,7 +72,7 @@ public class StreamsAPIEdu {
         /* 2 - Filtering elements */
 
         // filtering is applied based on a rule called 'predicate' 
-        // one can also define special predicates seperately.
+        // first task is creating a predicate
         List<String> list1 = Arrays.asList("Kelime1","Kelime2","Kelime3");
         
         // turn it to a stream, filter and collect back into antother list this time
@@ -92,22 +105,52 @@ public class StreamsAPIEdu {
         // No changes applied to object because stream wasn't referenced
         list2.forEach(System.out::println);
         
-        // mapping to an arbitrary lambda function
+        // 3.1 mapping to an arbitrary lambda function
         list2.stream()
              // lambda function defined in "{}"
              .map(kelime -> {
-                             int index = 0;
                              // this is redundant only to show we can define such things here.
                              String draft = null;
                              draft = kelime;
                              for (char harf : draft.toCharArray()) {
-                                 System.out.format("++++ %c ++++",kelime.charAt(index));
-                                 index += 1;
+                                 System.out.format("++++ %c ++++",harf);
                                 }
-                            return kelime;
+                             return kelime;
                             } )
              // calling a terminal function to see the results
              .forEach(System.out::println);
+
+        // 3.2 manipulating streams of arrays
+        
+        // Create a list of arrays then form a HasMap based on entries of list
+        List<String[]> list3 = new ArrayList<String[]>();
+        String[] entry1 = {"a","b","c"};
+        String[] entry2 = {"d","e","f"};
+        String[] entry3 = {"g","h","i"};
+        list3.add(entry1);
+        list3.add(entry2);
+        list3.add(entry3);
+
+        // hashmap
+        HashMap<String, String[]> map1 = new HashMap<String, String[]>();
+
+        // streamize the list to form hashmap
+        list3.stream()
+             .map(entry ->  {
+                                String key = entry[0];
+                                String[] value = {entry[1],entry[2]};
+                                map1.put(key, value);
+                                // must return a String[]
+                                return entry;
+                            })
+             // calling an empty terminal function to apply changes
+             .forEach(entry -> {});
+
+        // print elements
+        for (Map.Entry<String,String[]> entry : map1.entrySet()) {
+            System.out.println(entry);
+        }
+        
         
     }
 }
