@@ -45,7 +45,7 @@ import java.util.Map;
  * 
  *     last lazy op. is executed with terminal op. at the same time.
  * 
- *     Output operations are only handled when a terminal function exists in a operation pipeline !
+ *     Output operations are only handled when a terminal function called at operation pipeline !
  * 
  *  Mert Beşiktepe 2019 ITU
  */
@@ -72,6 +72,7 @@ public class StreamsAPIEdu {
         /* 2 - Filtering elements */
 
         // filtering is applied based on a rule called 'predicate' 
+        // one can also define special predicates seperately.
         // first task is creating a predicate
         List<String> list1 = Arrays.asList("Kelime1","Kelime2","Kelime3");
         
@@ -87,9 +88,23 @@ public class StreamsAPIEdu {
         // go to System.out class and call println on each element
         result.forEach(System.out::println);
         
-        /* 3 - Mapping elements to functions */
+        /* 3 - Mapping elements  */
 
-        // map() method enables mapping streams to functions element-wise
+        // map method is for mapping elements onto other elements.
+
+        /* COMMON MISCONSEPTION HERE :
+
+             map() method enables mapping streams to functions element-wise but this is not 
+             the correct way to use it. Below code demonstrates this miss-use. 
+
+             map() is a intermediate operation so this means any applied function in it
+             will not do any mutation until a terminal operation. So a more correct way is
+             as follows;
+             
+             .map(entry  -> map it to another or design an alteration on element  )
+             .forEach(entry -> function);
+        */
+
         // create a list, stream it filter and map the filtered ones to a function.
         List<String> list2 = Arrays.asList("mert","Java","tutorial");
 
@@ -105,7 +120,7 @@ public class StreamsAPIEdu {
         // No changes applied to object because stream wasn't referenced
         list2.forEach(System.out::println);
         
-        // 3.1 mapping to an arbitrary lambda function
+        // 3.1 mapping to an arbitrary lambda function FALSE WAY
         list2.stream()
              // lambda function defined in "{}"
              .map(kelime -> {
@@ -120,7 +135,7 @@ public class StreamsAPIEdu {
              // calling a terminal function to see the results
              .forEach(System.out::println);
 
-        // 3.2 manipulating streams of arrays
+        // 3.2 manipulating streams of arrays FALSE WAY
         
         // Create a list of arrays then form a HasMap based on entries of list
         List<String[]> list3 = new ArrayList<String[]>();
@@ -150,6 +165,23 @@ public class StreamsAPIEdu {
         for (Map.Entry<String,String[]> entry : map1.entrySet()) {
             System.out.println(entry);
         }
+
+        /* 4 - Collectiong to HashMap */
+
+        // We will group the list3 to a hashmap using correct way this time
+        // list3 = ArrayList<String[]> --> map2 = HashMap<String,String[]>
+
+        // streamize the list and collect to map 
+        Map<String,String[]> map2 = list3.stream()
+                                             // collecting
+                                             .collect(Collectors.toMap(entry -> entry[0], 
+                                                                       entry -> new String[] {entry[1], entry[2]}));
+                       
+        // print elements
+        for (Map.Entry<String,String[]> entry : map2.entrySet()) {
+             System.out.println(entry);
+        }
+        
         
         
     }
