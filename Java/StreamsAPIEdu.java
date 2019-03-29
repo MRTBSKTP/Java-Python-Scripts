@@ -166,9 +166,9 @@ public class StreamsAPIEdu {
             System.out.println(entry);
         }
 
-        /* 4 - Collectiong to HashMap */
+        /* 4 - Collectiong to Map */
 
-        // We will group the list3 to a hashmap using correct way this time
+        // We will group the list3 to a map using correct way this time
         // list3 = ArrayList<String[]> --> map2 = HashMap<String,String[]>
 
         // streamize the list and collect to map 
