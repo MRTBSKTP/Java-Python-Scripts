@@ -75,7 +75,7 @@ def createDestination():
     
 # Driver Code
 
-# Edited in version control...
+# Edited for version control...
 
 # print files
 fileNames = getFiles()
